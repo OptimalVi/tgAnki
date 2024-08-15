@@ -14,7 +14,7 @@ var (
 
 func GetBot() *tgbotapi.BotAPI {
 	once.Do(func() {
-		bot, _ = tgbotapi.NewBotAPI(conf.BotToken)
+		bot, _ = tgbotapi.NewBotAPI(conf.GetConfig().BotToken)
 		bot.Debug = true
 	})
 	return bot

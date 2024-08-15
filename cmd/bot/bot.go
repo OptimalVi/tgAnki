@@ -3,6 +3,7 @@ package main
 import (
 	"log"
 	"optimal_vi/tg_anki/internal/bot/handler"
+	"optimal_vi/tg_anki/pkg/conf"
 	"optimal_vi/tg_anki/pkg/db"
 	"optimal_vi/tg_anki/pkg/tg"
 

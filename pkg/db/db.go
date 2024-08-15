@@ -16,7 +16,7 @@ var (
 
 func GetDB() *sql.DB {
 	if db == nil || db.Stats().OpenConnections == 0 {
-		db, err = sql.Open("sqlite3", conf.DBPath)
+		db, err = sql.Open("sqlite3", conf.GetConfig().DBPath)
 		if err != nil {
 			log.Fatal(err) // Handle the error appropriately in your application
 		}
@@ -32,7 +32,7 @@ func Migrate() {
 
 	existsMigrations := make(map[string]bool)
 
-	files, err := os.ReadDir(conf.DBMigrationsPath)
+	files, err := os.ReadDir(conf.GetConfig().DBMigrationsPath)
 	if err != nil {
 		log.Fatal(err)
 	}
