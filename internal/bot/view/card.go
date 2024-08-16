@@ -1,25 +1,26 @@
 package view
 
 import (
-	"optimal_vi/tg_anki/internal/model"
+	"fmt"
+	"optimal_vi/tg_anki/internal/bot/state"
 
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
 )
 
-func TgViewCardList(msg tgbotapi.MessageConfig, cards []model.Card) tgbotapi.MessageConfig {
-	msg.Text = "Cards:"
-	cardsButtons := make([][]tgbotapi.InlineKeyboardButton, 0, len(cards))
+func AddCardView(chatId int64, deckName string, st int) *tgbotapi.MessageConfig {
+	msg := tgbotapi.NewMessage(chatId, "")
+	switch st {
+	case state.CardCreateFront:
+		msg.Text = fmt.Sprintf("Creating new card for deck: %s\nWrite front view:", deckName)
+	case state.CardCreateBack:
+		msg.Text = "Write back view:"
+	}
 
-	// for _, card := range cards {
-		// row := tgbotapi.NewInlineKeyboardRow(
-		// 	tgbotapi.NewInlineKeyboardButtonData(
-		// 		card.FrontText,
-		// 		strconv.Itoa(card.ID),
-		// 	),
-		// )
-		// cardsButtons = append(cardsButtons, row)
-	// }
+	msg.ReplyMarkup = tgbotapi.NewInlineKeyboardMarkup(
+		tgbotapi.NewInlineKeyboardRow(tgbotapi.NewInlineKeyboardButtonData(
+			"Cancel", "cancel",
+		)),
+	)
 
-	msg.ReplyMarkup = tgbotapi.NewInlineKeyboardMarkup(cardsButtons...)
-	return msg
+	return &msg
 }

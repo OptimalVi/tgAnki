@@ -43,6 +43,27 @@ func Handler(chat *tg.ChatContext, udp *tg.BotUpdate) error {
 		UpdateType: tg.BotUpdateCallbackQuery,
 		Controller: controller.DeckDropController,
 	})
+	AddHandlerData(&tg.BotUpdateHandleData{
+		Action:     tg.ChatContextDeckEdit,
+		UpdateType: tg.BotUpdateText,
+		Controller: controller.DeckEditController,
+	})
+	AddHandlerData(&tg.BotUpdateHandleData{
+		Action:     tg.ChatContextDeckEdit,
+		UpdateType: tg.BotUpdateCallbackQuery,
+		Controller: controller.DeckEditController,
+	})
+
+	AddHandlerData(&tg.BotUpdateHandleData{
+		Action:     tg.ChatContextCardCreate,
+		UpdateType: tg.BotUpdateText,
+		Controller: controller.CardCreateController,
+	})
+	AddHandlerData(&tg.BotUpdateHandleData{
+		Action:     tg.ChatContextCardCreate,
+		UpdateType: tg.BotUpdateCallbackQuery,
+		Controller: controller.CardCreateController,
+	})
 
 	matched, err := DefineController(Action, UdpType)
 	if err != nil {
@@ -71,31 +92,3 @@ func DefineController(chatAction int, updateType int) (*tg.BotUpdateHandleData, 
 
 	return nil, fmt.Errorf("No matching handler Action %d, UpdateType %d", chatAction, updateType)
 }
-
-// func StartHandler(chat *tg.ChatContext, udp tg.BotUpdate) error {
-// 	fmt.Printf("\nStart handler triggered for chat ID %d\n", chat.ID)
-
-// 	tp, _ := udp.GetType()
-// 	fmt.Printf("Type: %d\n", tp)
-// 	isCallback, err := udp.TypeIs(tg.BotUpdateCallbackQuery)
-// 	if err != nil {
-// 		fmt.Print("\nError b-h-t-17:", err)
-// 	}
-// 	if !isCallback {
-// 		fmt.Print("Error b-h-t-23: Invalid update type")
-// 		return tg.InvalidMessageType{}
-// 	}
-
-// 	if udp.CallbackQuery.Data == "create-deck" {
-// 		controller.CreateDeckController(chat)
-// 	} else {
-// 		deckId, err := strconv.Atoi(udp.CallbackQuery.Data)
-// 		if err != nil {
-// 			fmt.Print("\nError b-h-t-29:", err)
-// 			return err
-// 		}
-// 		controller.OpenDeckController(chat, deckId)
-// 	}
-
-// 	return nil
-// }

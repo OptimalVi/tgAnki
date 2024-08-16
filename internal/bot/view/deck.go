@@ -90,10 +90,21 @@ func DeckDropView(chatId int64, deckName string) tgbotapi.MessageConfig {
 	msg := tgbotapi.NewMessage(chatId, fmt.Sprintf("Are you sure you want delete deck '%s'?", deckName))
 	msg.ReplyMarkup = tgbotapi.NewInlineKeyboardMarkup(
 		tgbotapi.NewInlineKeyboardRow(
-            tgbotapi.NewInlineKeyboardButtonData("Yes, delete", "confirm"),
-            tgbotapi.NewInlineKeyboardButtonData("Cancel", "back"),
-        ),
+			tgbotapi.NewInlineKeyboardButtonData("Yes, delete", "confirm"),
+			tgbotapi.NewInlineKeyboardButtonData("Cancel", "back"),
+		),
 	)
-	
+
+	return msg
+}
+
+func DeckEditView(chatId int64, deckName string) tgbotapi.MessageConfig {
+	msg := tgbotapi.NewMessage(chatId, fmt.Sprintf("Enter the new name for deck '%s':", deckName))
+
+	msg.ReplyMarkup = tgbotapi.NewInlineKeyboardMarkup(
+		tgbotapi.NewInlineKeyboardRow(
+			tgbotapi.NewInlineKeyboardButtonData("Cancel", "back"),
+		))
+
 	return msg
 }

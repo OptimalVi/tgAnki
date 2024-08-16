@@ -12,12 +12,12 @@ type DeckRepository struct {
 
 func (r *DeckRepository) GetDeck(id int) (*model.Deck, error) {
 	row := r.DB.QueryRow("SELECT id, name, chatId, createdAt FROM decks WHERE id =?", id)
-    deck := model.Deck{}
-    err := row.Scan(&deck.ID, &deck.Name, &deck.ChatID, &deck.CreatedAt)
-    if err == sql.ErrNoRows {
-        return nil, nil
-    }
-    return &deck, err
+	deck := model.Deck{}
+	err := row.Scan(&deck.ID, &deck.Name, &deck.ChatID, &deck.CreatedAt)
+	if err == sql.ErrNoRows {
+		return nil, nil
+	}
+	return &deck, err
 }
 
 func (r *DeckRepository) GetDecksByChatID(chatId int64) ([]model.Deck, error) {
@@ -53,6 +53,15 @@ func (r *DeckRepository) InsertDeck(chatId int64, name string) (sql.Result, erro
 }
 
 func (r *DeckRepository) DeleteDeck(chatId int64, deckId int) error {
-    _, err := r.DB.Exec("DELETE FROM decks WHERE chatId =? AND id =?", chatId, deckId)
-    return err
+	_, err := r.DB.Exec("DELETE FROM decks WHERE chatId =? AND id =?", chatId, deckId)
+	return err
+}
+
+func (r *DeckRepository) UpdateName(deckId int, name string) error {
+	smtp, err := r.DB.Prepare("UPDATE decks SET name =? WHERE id =?")
+	if err != nil {
+		return err
+	}
+	_, err = smtp.Exec(name, deckId)
+	return err
 }

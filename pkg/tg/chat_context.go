@@ -51,6 +51,15 @@ func (c *ChatContext) GetData(key string) interface{} {
 	return c.data[key]
 }
 
+func (c *ChatContext) HasData(key string) bool {
+	_, ok := c.data[key]
+	return ok
+}
+
+func (c *ChatContext) DeleteData(key string) {
+	delete(c.data, key)
+}
+
 func (c *ChatContext) ResetData() {
 	c.data = make(map[string]interface{})
 }
