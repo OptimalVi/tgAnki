@@ -41,6 +41,24 @@ func CardCreateController(chat *tg.ChatContext, udp *tg.BotUpdate) error {
 			if err != nil {
 				return err
 			}
+
+		case state.CardCreateBack:
+			card := chat.GetData("card").(*model.Card)
+			card.BackText = udp.Message.Text
+
+			err := cardRepository.InsertCard(card)
+			if err != nil {
+				return err
+			}
+
+			_, err = tg.Send(view.OpenDeckView(chat.ID, deck))
+			if err != nil {
+				return err
+			}
+
+			chat.DeleteData("card-create")
+			chat.SetAction(tg.ChatContextDeck)
+			return nil
 		}
 	}
 
